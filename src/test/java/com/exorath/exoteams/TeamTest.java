@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**
- * Created by toonsev on 7/23/2016.
+ * Created by ToonSevrin on 7/23/2016.
  */
 public class TeamTest {
     @Test
@@ -35,7 +35,13 @@ public class TeamTest {
         assertTrue(team.getPlayers().contains(player));
         assertTrue(team.getPlayers().contains(player2));
     }
-
+    @Test
+    public void addPlayerEventCalledTest(){
+        Team team = new Team();
+        TeamPlayer player = mock(TeamPlayer.class);
+        team.add(player);
+        assertTrue(team.getPlayers().contains(player));
+    }
     @Test
     public void addPlayerSizeTest(){
         Team team = new Team();
