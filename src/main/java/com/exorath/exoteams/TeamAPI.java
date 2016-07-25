@@ -22,6 +22,10 @@ public class TeamAPI {
         teams.remove(team);
     }
 
+    public void clear(){
+        teams.clear();
+    }
+
     public Collection getTeams() {
         return teams;
     }

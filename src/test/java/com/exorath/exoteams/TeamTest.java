@@ -11,6 +11,7 @@ import static org.mockito.Mockito.mock;
  * Created by ToonSevrin on 7/23/2016.
  */
 public class TeamTest {
+
     @Test
     public void defaultSizeTest(){
         Team team = new Team();
@@ -102,5 +103,11 @@ public class TeamTest {
         team.add(mock(TeamPlayer.class));
         team.clear();
         assertEquals(team.getPlayers().size(), 0);
+    }
+
+    @Test
+    public void metaDataNotEmptyTest(){
+        Team team = new Team();
+        assertFalse(team.getMetaData() == null);
     }
 }

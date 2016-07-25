@@ -22,4 +22,8 @@ public class Team {
     public void clear() {
         players.clear();
     }
+
+    public Properties getMetaData() {
+        return null;
+    }
 }

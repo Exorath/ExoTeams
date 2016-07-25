@@ -78,4 +78,13 @@ public class TeamAPITest {
         teamAPI.addTeam(new Team());
         assertEquals(teamAPI.getTeams().size(), 1);
     }
+
+    @Test
+    public void clearTeamSizeTest(){
+        TeamAPI teamAPI = TeamAPI.createAPI();
+        teamAPI.addTeam(new Team());
+        teamAPI.addTeam(new Team());
+        teamAPI.clear();
+        assertEquals(teamAPI.getTeams().size(), 0);
+    }
 }
