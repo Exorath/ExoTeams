@@ -11,7 +11,6 @@ import java.util.Collection;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.withSettings;
 
 /**
  * Created by Toon on 8/2/2016.
