@@ -1,5 +1,8 @@
 package com.exorath.exoteams;
 
+import com.exorath.exoproperties.Properties;
+import com.exorath.exoteams.player.TeamPlayer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,6 +12,8 @@ import java.util.List;
  */
 public class Team {
     private List<TeamPlayer> players = new ArrayList<>();
+    private Properties properties = new Properties();
+
     public void add(TeamPlayer teamPlayer) {
         players.add(teamPlayer);
     }
@@ -23,7 +28,8 @@ public class Team {
         players.clear();
     }
 
-    public Properties getMetaData() {
-        return null;
+    public Properties getProperties() {
+        return properties;
     }
+
 }

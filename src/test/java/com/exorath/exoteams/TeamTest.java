@@ -1,5 +1,7 @@
 package com.exorath.exoteams;
 
+import com.exorath.exoproperties.Property;
+import com.exorath.exoteams.player.TeamPlayer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -106,8 +108,15 @@ public class TeamTest {
     }
 
     @Test
-    public void metaDataNotEmptyTest(){
+    public void propertiesNotNullTest(){
         Team team = new Team();
-        assertFalse(team.getMetaData() == null);
+        assertTrue(team.getProperties() != null);
+    }
+    @Test
+    public void propertiesAddTest(){
+        Team team = new Team();
+        Property<String> property = new Property<>();
+        team.getProperties().set(property, "blbla");
+        assertTrue(team.getProperties().contains(property));
     }
 }
