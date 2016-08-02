@@ -1,5 +1,6 @@
 package com.exorath.exoteams;
 
+import com.exorath.exoproperties.Propertiesable;
 import com.exorath.exoproperties.Property;
 import com.exorath.exoteams.player.TeamPlayer;
 import org.junit.Test;
@@ -118,5 +119,15 @@ public class TeamTest {
         Property<String> property = new Property<>();
         team.getProperties().set(property, "blbla");
         assertTrue(team.getProperties().contains(property));
+    }
+    @Test
+    public void isPropertiesableTest(){
+        Team team = new Team();
+        assertTrue(team instanceof Propertiesable);
+    }
+    @Test
+    public void startRulesNotNullTest(){
+        Team team = new Team();
+        assertTrue(team.getStartRules() != null);
     }
 }
