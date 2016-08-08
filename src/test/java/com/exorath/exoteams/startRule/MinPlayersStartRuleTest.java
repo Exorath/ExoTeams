@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -72,5 +73,26 @@ public class MinPlayersStartRuleTest {
         team.remove(player1);
         startRule1player.onPlayerLeaveTeam(new TeamPlayerLeaveTeamEvent(mock(Collection.class), team, player1));
         assertFalse(startRule1player.evaluate());
+    }
+    @Test
+    public void subscriberCalledWhenPlayerJoinsTest(){
+        AtomicBoolean result = new AtomicBoolean(false);
+        startRule1player.getObservableEvaluation().subscribe(bool -> result.set(true));
+
+        team.add(player1);
+        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
+
+        assertTrue(result.get());
+    }
+
+    @Test
+    public void subscriberCalledWhenPlayerLeavesTest(){
+        AtomicBoolean result = new AtomicBoolean(false);
+        team.add(player1);
+        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
+        startRule1player.getObservableEvaluation().subscribe(bool -> result.set(true));
+        team.remove(player1);
+        startRule1player.onPlayerLeaveTeam(new TeamPlayerLeaveTeamEvent(mock(Collection.class), team, player1));
+        assertTrue(result.get());
     }
 }
