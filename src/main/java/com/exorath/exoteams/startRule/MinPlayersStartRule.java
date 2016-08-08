@@ -7,7 +7,7 @@ import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
 /**
  * Created by Toon on 8/2/2016.
  */
-public class MinPlayersStartRule implements StartRule {
+public class MinPlayersStartRule extends StartRule {
     private boolean canStart = false;
     private int minPlayersAmount;
 
@@ -20,7 +20,7 @@ public class MinPlayersStartRule implements StartRule {
     }
 
     @Override
-    public boolean canStart() {
+    public boolean doEvaluate() {
         return canStart;
     }
 
@@ -38,7 +38,7 @@ public class MinPlayersStartRule implements StartRule {
         boolean canStart = event.getTeam().getPlayers().size() >= minPlayersAmount;
         if(this.canStart != canStart){
             this.canStart = canStart;
-            //Maybe emit event to observers?
+            evaluate();
         }
     }
 }

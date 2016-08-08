@@ -1,9 +1,11 @@
 package com.exorath.exoteams.startRule;
 
+import com.exorath.exorules.rule.Rule;
 import com.exorath.exoteams.Team;
 import com.exorath.exoteams.player.TeamPlayer;
 import com.exorath.exoteams.player.TeamPlayerJoinTeamEvent;
 import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -16,55 +18,59 @@ import static org.mockito.Mockito.mock;
  * Created by Toon on 8/2/2016.
  */
 public class MinPlayersStartRuleTest {
-    @Test
-    public void cannotStartByDefaultTest(){
-        MinPlayersStartRule startRule = new MinPlayersStartRule(1);
-        assertFalse(startRule.canStart());
+
+    private Team team;
+    private StartRule startRule1player, startRule2players;
+    private TeamPlayer player1, player2;
+
+    @Before
+    public void setup() {
+        startRule1player = new MinPlayersStartRule(1);
+        startRule2players = new MinPlayersStartRule(2);
+
+        player1 = mock(TeamPlayer.class);
+        player2 = mock(TeamPlayer.class);
+
+        team = new Team();
     }
 
     @Test
-    public void canStartAfterJoinTest(){
-        MinPlayersStartRule startRule = new MinPlayersStartRule(1);
-        TeamPlayer player = mock(TeamPlayer.class);
-        Team team = new Team();
-        team.add(player);
-        startRule.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player));
-        assertTrue(startRule.canStart());
+    public void cannotStartByDefaultTest() {
+        assertFalse(startRule1player.evaluate());
     }
 
     @Test
-    public void cannotStartAfterJoinTest(){
-        MinPlayersStartRule startRule = new MinPlayersStartRule(2);
-        TeamPlayer player = mock(TeamPlayer.class);
-        Team team = new Team();
-        team.add(player);
-        startRule.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player));
-        assertFalse(startRule.canStart());
+    public void canStartAfterJoinTest() {
+        team.add(player1);
+        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
+        assertTrue(startRule1player.evaluate());
     }
 
     @Test
-    public void canStartAfterLeaveTest(){
-        MinPlayersStartRule startRule = new MinPlayersStartRule(1);
-        TeamPlayer player = mock(TeamPlayer.class);
-        TeamPlayer player2 = mock(TeamPlayer.class);
-        Team team = new Team();
-        team.add(player);
-        team.add(mock(TeamPlayer.class));
-        startRule.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player));
-        startRule.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player2));
-        startRule.onPlayerLeaveTeam(new TeamPlayerLeaveTeamEvent(mock(Collection.class), team, player));
-        assertTrue(startRule.canStart());
+    public void cannotStartAfterJoinTest() {
+        team.add(player1);
+        startRule2players.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
+        assertFalse(startRule2players.evaluate());
     }
 
     @Test
-    public void cannotStartAfterLeaveTest(){
-        MinPlayersStartRule startRule = new MinPlayersStartRule(1);
-        TeamPlayer player = mock(TeamPlayer.class);
+    public void canStartAfterLeaveTest() {
         Team team = new Team();
-        team.add(player);
-        startRule.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player));
-        team.remove(player);
-        startRule.onPlayerLeaveTeam(new TeamPlayerLeaveTeamEvent(mock(Collection.class), team, player));
-        assertFalse(startRule.canStart());
+        team.add(player1);
+        team.add(player2);
+        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
+        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player2));
+        team.remove(player1);
+        startRule1player.onPlayerLeaveTeam(new TeamPlayerLeaveTeamEvent(mock(Collection.class), team, player1));
+        assertTrue(startRule1player.evaluate());
+    }
+
+    @Test
+    public void cannotStartAfterLeaveTest() {
+        team.add(player1);
+        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
+        team.remove(player1);
+        startRule1player.onPlayerLeaveTeam(new TeamPlayerLeaveTeamEvent(mock(Collection.class), team, player1));
+        assertFalse(startRule1player.evaluate());
     }
 }

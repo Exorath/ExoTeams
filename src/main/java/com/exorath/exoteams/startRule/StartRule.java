@@ -1,15 +1,16 @@
 package com.exorath.exoteams.startRule;
 
+import com.exorath.exorules.rule.EasyRule;
 import com.exorath.exoteams.player.TeamPlayerJoinTeamEvent;
 import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
 
 /**
+ * Call evaluate to emit to subscribers (epic documentation to be improved)
  * Created by Toon on 8/2/2016.
  */
-public interface StartRule {
-    boolean canStart();
+public abstract class StartRule extends EasyRule {
 
-    void onPlayerJoinTeam(TeamPlayerJoinTeamEvent joinEvent);
+    abstract void onPlayerJoinTeam(TeamPlayerJoinTeamEvent joinEvent);
 
-    void onPlayerLeaveTeam(TeamPlayerLeaveTeamEvent leaveEvent);
+    abstract void onPlayerLeaveTeam(TeamPlayerLeaveTeamEvent leaveEvent);
 }
