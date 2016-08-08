@@ -3,8 +3,11 @@ package com.exorath.exoteams;
 import com.exorath.exoproperties.Propertiesable;
 import com.exorath.exoproperties.Property;
 import com.exorath.exoteams.player.TeamPlayer;
+import com.exorath.exoteams.startRule.StartRule;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -45,11 +48,13 @@ public class TeamTest {
         assertTrue(team.getPlayers().contains(player2));
     }
     @Test
-    public void addPlayerEventCalledTest(){
-        //TODO; this test does not seem right
+    public void addPlayerSubscriberCalledTest(){
+        AtomicBoolean called = new AtomicBoolean(false);
+        team.getOnPlayerJoinTeamObservable().subscribe(bool -> called.set(true));
         team.add(player1);
-        assertTrue(team.getPlayers().contains(player1));
+        assertTrue(called.get());
     }
+
     @Test
     public void addPlayerSizeTest(){
         team.add(player1);
@@ -92,36 +97,53 @@ public class TeamTest {
         team.add(player2);
         assertEquals(team.getPlayers().size(), 1);
     }
+    @Test
+    public void removePlayerSubscriberCalledTest(){
+        AtomicBoolean called = new AtomicBoolean(false);
+        team.getOnPlayerLeaveTeamObservable().subscribe(bool -> called.set(true));
+        team.add(player1);
+        team.remove(player1);
+        assertTrue(called.get());
+    }
 
     @Test
     public void clearTeamTest(){
-        Team team = new Team();
-        team.add(mock(TeamPlayer.class));
-        team.add(mock(TeamPlayer.class));
+        team.add(player1);
+        team.add(player2);
         team.clear();
         assertEquals(team.getPlayers().size(), 0);
     }
 
     @Test
     public void propertiesNotNullTest(){
-        Team team = new Team();
         assertTrue(team.getProperties() != null);
     }
     @Test
     public void propertiesAddTest(){
-        Team team = new Team();
         Property<String> property = new Property<>();
         team.getProperties().set(property, "blbla");
         assertTrue(team.getProperties().contains(property));
     }
     @Test
     public void isPropertiesableTest(){
-        Team team = new Team();
         assertTrue(team instanceof Propertiesable);
     }
+
     @Test
-    public void startRulesNotNullTest(){
-        Team team = new Team();
+    public void startRulesNotNullByDefaultTest(){
         assertTrue(team.getStartRules() != null);
+    }
+
+
+    @Test
+    public void startRulesEmptyByDefaultTest(){
+        assertTrue(team.getStartRules().isEmpty());
+    }
+
+    @Test
+    public void addStartRulesContainsTest(){
+        StartRule startRule = mock(StartRule.class);
+        team.addStartRule(startRule);
+        assertTrue(team.getStartRules().contains(startRule));
     }
 }
