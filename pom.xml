@@ -19,26 +19,26 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <repositories>
         <repository>
-            <id>ServerCommunication.maven.snapshots</id>
-            <url>https://raw.github.com/Exorath/ExoProperties/mvn-repo/</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>com.exorath</groupId>
+        <groupId>com.github.Exorath</groupId>
+        <artifactId>ExoRules</artifactId>
+        <version>1.0.1</version>
+    </dependency>
+        <dependency>
+            <groupId>com.github.Exorath</groupId>
             <artifactId>ExoProperties</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.exorath</groupId>
-            <artifactId>ExoRules</artifactId>
-            <version>1.0.0</version>
-        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
