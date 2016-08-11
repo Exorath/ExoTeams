@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 public class MinPlayersStartRuleTest {
 
     private Team team;
-    private StartRule startRule1player, startRule2players;
+    private TeamStartRule startRule1player, startRule2players;
     private TeamPlayer player1, player2;
 
     @Before
@@ -43,56 +43,50 @@ public class MinPlayersStartRuleTest {
     @Test
     public void canStartAfterJoinTest() {
         team.add(player1);
-        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
+        startRule1player.onPlayerJoinTeam(team, player1);
         assertTrue(startRule1player.evaluate());
     }
 
     @Test
     public void cannotStartAfterJoinTest() {
         team.add(player1);
-        startRule2players.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
+        startRule2players.onPlayerJoinTeam(team, player1);
         assertFalse(startRule2players.evaluate());
     }
 
     @Test
     public void canStartAfterLeaveTest() {
         Team team = new Team();
+        team.addStartRule(startRule1player);
         team.add(player1);
         team.add(player2);
-        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
-        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player2));
         team.remove(player1);
-        startRule1player.onPlayerLeaveTeam(new TeamPlayerLeaveTeamEvent(mock(Collection.class), team, player1));
         assertTrue(startRule1player.evaluate());
     }
 
     @Test
     public void cannotStartAfterLeaveTest() {
+        team.addStartRule(startRule1player);
         team.add(player1);
-        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
         team.remove(player1);
-        startRule1player.onPlayerLeaveTeam(new TeamPlayerLeaveTeamEvent(mock(Collection.class), team, player1));
         assertFalse(startRule1player.evaluate());
     }
     @Test
     public void subscriberCalledWhenPlayerJoinsTest(){
         AtomicBoolean result = new AtomicBoolean(false);
         startRule1player.getObservableEvaluation().subscribe(bool -> result.set(true));
-
+        team.addStartRule(startRule1player);
         team.add(player1);
-        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
-
         assertTrue(result.get());
     }
 
     @Test
     public void subscriberCalledWhenPlayerLeavesTest(){
         AtomicBoolean result = new AtomicBoolean(false);
-        team.add(player1);
-        startRule1player.onPlayerJoinTeam(new TeamPlayerJoinTeamEvent(mock(Collection.class), team, player1));
         startRule1player.getObservableEvaluation().subscribe(bool -> result.set(true));
+        team.addStartRule(startRule1player);
+        team.add(player1);
         team.remove(player1);
-        startRule1player.onPlayerLeaveTeam(new TeamPlayerLeaveTeamEvent(mock(Collection.class), team, player1));
         assertTrue(result.get());
     }
 }

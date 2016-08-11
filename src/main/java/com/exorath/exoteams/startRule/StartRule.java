@@ -9,8 +9,9 @@ import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
  * Created by Toon on 8/2/2016.
  */
 public abstract class StartRule extends EasyRule {
-
-    abstract void onPlayerJoinTeam(TeamPlayerJoinTeamEvent joinEvent);
-
-    abstract void onPlayerLeaveTeam(TeamPlayerLeaveTeamEvent leaveEvent);
+    /**
+     * Gets the reason why the game cannot start. This reason may display in chat.
+     * @return the reason why the game cannot start
+     */
+   public abstract String getReason();
 }
