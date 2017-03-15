@@ -158,7 +158,8 @@ public class TeamAPITest {
 
     @Test
     public void test(){
-        teamAPI.addStartRule(mock(GlobalStartRule.class));
-        teamAPI.removeStartRule();
+        GlobalStartRule startRule = mock(GlobalStartRule.class);
+        teamAPI.addStartRule(startRule);
+        teamAPI.removeStartRule(startRule);
     }
 }

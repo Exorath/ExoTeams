@@ -16,7 +16,6 @@
 
 package com.exorath.exoteams.startRule;
 
-import com.exorath.exoteams.player.TeamPlayer;
 import com.exorath.exoteams.player.TeamPlayerJoinTeamEvent;
 import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
 

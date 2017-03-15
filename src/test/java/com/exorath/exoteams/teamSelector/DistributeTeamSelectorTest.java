@@ -29,7 +29,7 @@ public class DistributeTeamSelectorTest {
     }
 
     @Test
-    public void selectsTeamWithLeastPlayersTest(){
+    public void selectsTeamWithLeastPlayersTest() throws Exception{
         List<Team> teams = new ArrayList<>();
         teams.add(teamEmpty1);
         teams.add(team1Player);
@@ -37,14 +37,14 @@ public class DistributeTeamSelectorTest {
     }
 
     @Test
-    public void returnsTeamIfItsTheOnlyOneTest(){
+    public void returnsTeamIfItsTheOnlyOneTest() throws Exception{
         List<Team> teams = new ArrayList<>();
         teams.add(teamEmpty1);
         assertEquals(distributeTeamSelector.getTeam(teams, mock(TeamPlayer.class)), teamEmpty1);
     }
 
     @Test
-    public void returnsNullIfNoTeamsTest(){
+    public void returnsNullIfNoTeamsTest() throws Exception{
         List<Team> teams = new ArrayList<>();
         assertEquals(distributeTeamSelector.getTeam(teams, mock(TeamPlayer.class)), null);
     }
