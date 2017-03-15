@@ -26,6 +26,8 @@ public class Team implements Propertiesable{
     private Subject<TeamPlayer, TeamPlayer> onPlayerJoinTeam = new SerializedSubject<>(PublishSubject.create());
     private Subject<TeamPlayer, TeamPlayer> onPlayerLeaveTeam = new SerializedSubject<>(PublishSubject.create());
 
+    private int maxPlayers = 0;
+
     public void add(TeamPlayer teamPlayer) {
         players.add(teamPlayer);
         onPlayerJoinTeam.onNext(teamPlayer);
@@ -66,5 +68,21 @@ public class Team implements Propertiesable{
     }
     public boolean removeStartRule(TeamStartRule startRule) {
         return compositeRule.removeRule(startRule);
+    }
+
+
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
+    public boolean isFull(){
+        if(maxPlayers == 0)
+            return false;
+        return players.size() >= maxPlayers;
     }
 }
