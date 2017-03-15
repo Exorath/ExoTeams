@@ -1,7 +1,15 @@
 package com.exorath.exoteams;
 
+import com.exorath.exoteams.player.TeamPlayer;
+import com.exorath.exoteams.player.TeamPlayerJoinTeamEvent;
+import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
+import com.exorath.exoteams.startRule.GlobalStartRule;
+import com.exorath.exoteams.startRule.StartRule;
+import com.exorath.exoteams.teamSelector.DistributeTeamSelector;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,8 +27,8 @@ public class TeamAPITest {
     @Before
     public void setup() {
         teamAPI = TeamAPI.createAPI();
-        team1 = mock(Team.class);
-        team2 = mock(Team.class);
+        team1 = new Team();
+        team2 = new Team();
     }
 
     @Test
@@ -84,5 +92,73 @@ public class TeamAPITest {
         teamAPI.addTeam(team2);
         teamAPI.clear();
         assertEquals(teamAPI.getTeams().size(), 0);
+    }
+
+    @Test
+    public void getTeamSelectorNotNullByDefaultTest(){
+        assertTrue(teamAPI.getTeamSelector() != null);
+    }
+
+
+    @Test
+    public void getTeamSelectorInstanceOfDistributeTeamSelectorByDefaultTest(){
+        assertTrue(teamAPI.getTeamSelector() instanceof DistributeTeamSelector);
+    }
+
+
+
+    @Test
+    public void getPlayerJoinTeamObservableCalledOnPlayerJoinTest(){
+        AtomicReference<TeamPlayer> ref = new AtomicReference<>();
+        Team team = new Team();
+        TeamPlayer player = mock(TeamPlayer.class);
+
+        teamAPI.getPlayerJoinTeamObservable().map(event -> event.getPlayer()).subscribe(p -> ref.set(p));
+        teamAPI.addTeam(team);
+        teamAPI.onPlayerJoin(player);
+        assertEquals(ref.get(), player);
+    }
+
+    @Test
+    public void getPlayerLeaveTeamObservableCalledOnPlayerLeaveTest(){
+        AtomicReference<TeamPlayer> ref = new AtomicReference<>();
+        Team team = new Team();
+        TeamPlayer player = mock(TeamPlayer.class);
+
+        teamAPI.getPlayerLeaveTeamObservable().map(event -> event.getPlayer()).subscribe(p -> ref.set(p));
+        teamAPI.addTeam(team);
+        teamAPI.onPlayerJoin(player);
+        teamAPI.onPlayerLeave(player);
+        assertEquals(ref.get(), player);
+    }
+
+    @Test
+    public void getPlayerLeaveTeamObservableNotCalledIfPlayerNotAdded(){
+        AtomicReference<TeamPlayer> ref = new AtomicReference<>();
+        Team team = new Team();
+        TeamPlayer player = mock(TeamPlayer.class);
+
+        teamAPI.getPlayerLeaveTeamObservable().map(event -> event.getPlayer()).subscribe(p -> ref.set(p));
+        teamAPI.addTeam(team);
+        teamAPI.onPlayerLeave(player);
+        assertEquals(ref.get(), null);
+    }
+
+    @Test
+    public void getPlayerLeaveTeamNotCalledIfPlayerNotLeft(){
+        AtomicReference<TeamPlayer> ref = new AtomicReference<>();
+        Team team = new Team();
+        TeamPlayer player = mock(TeamPlayer.class);
+
+        teamAPI.getPlayerLeaveTeamObservable().map(event -> event.getPlayer()).subscribe(p -> ref.set(p));
+        teamAPI.addTeam(team);
+        teamAPI.onPlayerJoin(player);
+        assertEquals(ref.get(), null);
+    }
+
+    @Test
+    public void test(){
+        teamAPI.addStartRule(mock(GlobalStartRule.class));
+        teamAPI.removeStartRule();
     }
 }
