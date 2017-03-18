@@ -129,7 +129,7 @@ public class TeamAPI {
      *
      * @return the registered teams
      */
-    public Collection getTeams() {
+    public Collection<Team> getTeams() {
         return teams;
     }
 
