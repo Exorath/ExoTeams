@@ -52,6 +52,12 @@ public class TeamAPI {
         teamSubscriptions.put(team, new Subscription[]{joinSubscription, leaveSubscription});
     }
 
+    public Team getTeam(TeamPlayer teamPlayer){
+        for(Team team : teams)
+            if(team.getPlayers().contains(teamPlayer))
+                return team;
+        return null;
+    }
     /**
      * Removes a team from this TeamAPI. Returns true if this teamAPI contained the team.
      *
