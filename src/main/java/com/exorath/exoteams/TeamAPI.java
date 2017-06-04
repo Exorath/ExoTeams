@@ -5,7 +5,7 @@ import com.exorath.exorules.rule.Rule;
 import com.exorath.exoteams.player.TeamPlayer;
 import com.exorath.exoteams.player.TeamPlayerJoinTeamEvent;
 import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
-import com.exorath.exoteams.startRule.TeamStartRule;
+import com.exorath.exoteams.startRule.GlobalStartRule;
 import com.exorath.exoteams.teamSelector.AlreadyInTeamException;
 import com.exorath.exoteams.teamSelector.DistributeTeamSelector;
 import com.exorath.exoteams.teamSelector.TeamSelector;
@@ -29,7 +29,7 @@ public class TeamAPI {
     private Subject<TeamPlayerLeaveTeamEvent, TeamPlayerLeaveTeamEvent> onPlayerLeaveTeam = new SerializedSubject<>(PublishSubject.create());
 
     private HashMap<Team, Subscription[]> teamSubscriptions = new HashMap<>();
-    private CompositeRule<TeamStartRule> globalStartRule = new CompositeRule();
+    private CompositeRule<GlobalStartRule> globalStartRule = new CompositeRule();
 
     /**
      * Adds a team to this teamAPI, also subscribes to it's observables.
@@ -161,11 +161,11 @@ public class TeamAPI {
         return globalStartRule;
     }
 
-    public void addStartRule(TeamStartRule startRule) {
+    public void addStartRule(GlobalStartRule startRule) {
         globalStartRule.addRule(startRule);
     }
 
-    public boolean removeStartRule(TeamStartRule startRule) {
+    public boolean removeStartRule(GlobalStartRule startRule) {
         return globalStartRule.removeRule(startRule);
     }
 }
