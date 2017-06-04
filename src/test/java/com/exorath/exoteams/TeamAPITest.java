@@ -10,12 +10,14 @@ import com.exorath.exoteams.teamSelector.DistributeTeamSelector;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Observable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by toonsev on 7/24/2016.
@@ -96,20 +98,19 @@ public class TeamAPITest {
     }
 
     @Test
-    public void getTeamSelectorNotNullByDefaultTest(){
+    public void getTeamSelectorNotNullByDefaultTest() {
         assertTrue(teamAPI.getTeamSelector() != null);
     }
 
 
     @Test
-    public void getTeamSelectorInstanceOfDistributeTeamSelectorByDefaultTest(){
+    public void getTeamSelectorInstanceOfDistributeTeamSelectorByDefaultTest() {
         assertTrue(teamAPI.getTeamSelector() instanceof DistributeTeamSelector);
     }
 
 
-
     @Test
-    public void getPlayerJoinTeamObservableCalledOnPlayerJoinTest(){
+    public void getPlayerJoinTeamObservableCalledOnPlayerJoinTest() {
         AtomicReference<TeamPlayer> ref = new AtomicReference<>();
         Team team = new Team();
         TeamPlayer player = mock(TeamPlayer.class);
@@ -121,7 +122,7 @@ public class TeamAPITest {
     }
 
     @Test
-    public void getPlayerLeaveTeamObservableCalledOnPlayerLeaveTest(){
+    public void getPlayerLeaveTeamObservableCalledOnPlayerLeaveTest() {
         AtomicReference<TeamPlayer> ref = new AtomicReference<>();
         Team team = new Team();
         TeamPlayer player = mock(TeamPlayer.class);
@@ -134,7 +135,7 @@ public class TeamAPITest {
     }
 
     @Test
-    public void getPlayerLeaveTeamObservableNotCalledIfPlayerNotAdded(){
+    public void getPlayerLeaveTeamObservableNotCalledIfPlayerNotAdded() {
         AtomicReference<TeamPlayer> ref = new AtomicReference<>();
         Team team = new Team();
         TeamPlayer player = mock(TeamPlayer.class);
@@ -146,7 +147,7 @@ public class TeamAPITest {
     }
 
     @Test
-    public void getPlayerLeaveTeamNotCalledIfPlayerNotLeft(){
+    public void getPlayerLeaveTeamNotCalledIfPlayerNotLeft() {
         AtomicReference<TeamPlayer> ref = new AtomicReference<>();
         Team team = new Team();
         TeamPlayer player = mock(TeamPlayer.class);
@@ -158,8 +159,10 @@ public class TeamAPITest {
     }
 
     @Test
-    public void test(){
+    public void test() {
         TeamStartRule startRule = mock(TeamStartRule.class);
+        when(startRule.getObservableEvaluation()).thenReturn(rx.Observable.create((s) -> {
+        }));
         teamAPI.addStartRule(startRule);
         teamAPI.removeStartRule(startRule);
     }
