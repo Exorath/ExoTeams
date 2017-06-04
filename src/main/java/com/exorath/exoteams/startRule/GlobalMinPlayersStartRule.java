@@ -34,6 +34,7 @@ public class GlobalMinPlayersStartRule extends GlobalStartRule {
 
     private synchronized void addPlayers(int amount) {
         players = players + amount;
+        System.out.println("Added player: " + players);
     }
 
     @Override
