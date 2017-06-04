@@ -1,5 +1,7 @@
 package com.exorath.exoteams.startRule;
 
+import com.exorath.exoteams.Team;
+import com.exorath.exoteams.TeamAPI;
 import com.exorath.exoteams.player.TeamPlayerJoinTeamEvent;
 import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
 
@@ -8,10 +10,11 @@ import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
  */
 public class GlobalMinPlayersStartRule extends GlobalStartRule {
     private boolean canStart = false;
-    private int players;
+    private TeamAPI teamAPI;
     private int minPlayers;
 
-    public GlobalMinPlayersStartRule(int minPlayers) {
+    public GlobalMinPlayersStartRule(TeamAPI teamAPI, int minPlayers) {
+        this.teamAPI = teamAPI;
         this.minPlayers = minPlayers;
     }
 
@@ -22,24 +25,17 @@ public class GlobalMinPlayersStartRule extends GlobalStartRule {
 
     @Override
     public void onPlayerLeave(TeamPlayerLeaveTeamEvent event) {
-        addPlayers(-1);
-        evaluate();
     }
 
     @Override
     public void onPlayerJoin(TeamPlayerJoinTeamEvent event) {
-        addPlayers(1);
-        evaluate();
+        System.out.println("onplayerjoin called");
     }
-
-    private synchronized void addPlayers(int amount) {
-        players = players + amount;
-        System.out.println("Added player: " + players);
-    }
-
     @Override
     public boolean doEvaluate() {
-        System.out.println("Evaluated: " + (players >= minPlayers));
+        int players = 0;
+        for (Team team : teamAPI.getTeams())
+            players += team.getPlayers().size();
         return players >= minPlayers;
     }
 }
