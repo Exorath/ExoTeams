@@ -21,14 +21,14 @@ public class GlobalMinPlayersStartRule extends GlobalStartRule {
     }
 
     @Override
-    public void onPlayerJoin(TeamPlayerLeaveTeamEvent event) {
-        addPlayers(1);
+    public void onPlayerLeave(TeamPlayerLeaveTeamEvent event) {
+        addPlayers(-1);
         evaluate();
     }
 
     @Override
     public void onPlayerJoin(TeamPlayerJoinTeamEvent event) {
-        addPlayers(-1);
+        addPlayers(1);
         evaluate();
     }
 

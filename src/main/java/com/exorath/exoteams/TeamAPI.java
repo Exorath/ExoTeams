@@ -48,6 +48,9 @@ public class TeamAPI {
         Subscription leaveSubscription = team.getOnPlayerLeaveTeamObservable()
                 .map(player -> new TeamPlayerLeaveTeamEvent(teams, team, player))
                 .subscribe(event -> onPlayerLeaveTeam.onNext(event));
+        //globalstartrule send join/leave
+        onPlayerJoinTeam.subscribe(event -> globalStartRule.getRules().forEach(rule -> rule.onPlayerJoin(event)));
+        onPlayerLeaveTeam.subscribe(event -> globalStartRule.getRules().forEach(rule -> rule.onPlayerLeave(event)));
         //Save the subscriptions so they can later be removed
         teamSubscriptions.put(team, new Subscription[]{joinSubscription, leaveSubscription});
     }
@@ -95,6 +98,7 @@ public class TeamAPI {
         }
         if (toJoin != null)
             toJoin.add(teamPlayer);
+        System.out.println("Player joined team: " + toJoin);
         return toJoin;
     }
 

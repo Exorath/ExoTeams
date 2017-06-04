@@ -23,6 +23,6 @@ import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
  * Created by Toon on 8/9/2016.
  */
 public abstract class GlobalStartRule extends StartRule {
-    public abstract void onPlayerJoin(TeamPlayerLeaveTeamEvent event);
+    public abstract void onPlayerLeave(TeamPlayerLeaveTeamEvent event);
     public abstract void onPlayerJoin(TeamPlayerJoinTeamEvent event);
 }
