@@ -5,6 +5,7 @@ import com.exorath.exoteams.player.TeamPlayerJoinTeamEvent;
 import com.exorath.exoteams.player.TeamPlayerLeaveTeamEvent;
 import com.exorath.exoteams.startRule.GlobalStartRule;
 import com.exorath.exoteams.startRule.StartRule;
+import com.exorath.exoteams.startRule.TeamStartRule;
 import com.exorath.exoteams.teamSelector.DistributeTeamSelector;
 import org.junit.Before;
 import org.junit.Test;
@@ -158,7 +159,7 @@ public class TeamAPITest {
 
     @Test
     public void test(){
-        GlobalStartRule startRule = mock(GlobalStartRule.class);
+        TeamStartRule startRule = mock(TeamStartRule.class);
         teamAPI.addStartRule(startRule);
         teamAPI.removeStartRule(startRule);
     }
