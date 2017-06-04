@@ -38,6 +38,6 @@ public class GlobalMinPlayersStartRule extends GlobalStartRule {
 
     @Override
     public boolean doEvaluate() {
-        return players > minPlayers;
+        return players >= minPlayers;
     }
 }
