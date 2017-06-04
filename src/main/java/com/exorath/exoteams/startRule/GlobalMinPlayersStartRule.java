@@ -39,6 +39,7 @@ public class GlobalMinPlayersStartRule extends GlobalStartRule {
 
     @Override
     public boolean doEvaluate() {
+        System.out.println("Evaluated: " + (players >= minPlayers));
         return players >= minPlayers;
     }
 }
