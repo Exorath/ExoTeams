@@ -31,6 +31,11 @@ public class TeamAPI {
     private HashMap<Team, Subscription[]> teamSubscriptions = new HashMap<>();
     private CompositeRule<GlobalStartRule> globalStartRule = new CompositeRule();
 
+    public TeamAPI(){
+        onPlayerJoinTeam.subscribe(event -> globalStartRule.getRules().forEach(rule ->
+                rule.onPlayerJoin(event)));
+        onPlayerLeaveTeam.subscribe(event -> globalStartRule.getRules().forEach(rule -> rule.onPlayerLeave(event)));
+    }
     /**
      * Adds a team to this teamAPI, also subscribes to it's observables.
      *
@@ -42,25 +47,27 @@ public class TeamAPI {
         if (team.getOnPlayerJoinTeamObservable() == null || team.getOnPlayerLeaveTeamObservable() == null)
             throw new NullPointerException("team.getOnPlayerJoinTeamObservable() and team.getOnPlayerLeaveTeamObservable() cannot be null.");
         //Map the observable player joins and player leaves to events and relay them to the observables in the TeamAPI.
+        team.getOnPlayerJoinTeamObservable().subscribe(teamPlayer -> System.out.println("Joined: " + team));
         Subscription joinSubscription = team.getOnPlayerJoinTeamObservable()
                 .map(player -> new TeamPlayerJoinTeamEvent(teams, team, player))
-                .subscribe(event -> onPlayerJoinTeam.onNext(event));
+                .subscribe(event -> {
+                    System.out.println("Yup joined");
+                    onPlayerJoinTeam.onNext(event);
+                });
         Subscription leaveSubscription = team.getOnPlayerLeaveTeamObservable()
                 .map(player -> new TeamPlayerLeaveTeamEvent(teams, team, player))
                 .subscribe(event -> onPlayerLeaveTeam.onNext(event));
-        //globalstartrule send join/leave
-        onPlayerJoinTeam.subscribe(event -> globalStartRule.getRules().forEach(rule -> rule.onPlayerJoin(event)));
-        onPlayerLeaveTeam.subscribe(event -> globalStartRule.getRules().forEach(rule -> rule.onPlayerLeave(event)));
         //Save the subscriptions so they can later be removed
         teamSubscriptions.put(team, new Subscription[]{joinSubscription, leaveSubscription});
     }
 
-    public Team getTeam(TeamPlayer teamPlayer){
-        for(Team team : teams)
-            if(team.getPlayers().contains(teamPlayer))
+    public Team getTeam(TeamPlayer teamPlayer) {
+        for (Team team : teams)
+            if (team.getPlayers().contains(teamPlayer))
                 return team;
         return null;
     }
+
     /**
      * Removes a team from this TeamAPI. Returns true if this teamAPI contained the team.
      *
@@ -105,6 +112,7 @@ public class TeamAPI {
 
     /**
      * The API consumer should call this whenever a player leaves. It will remove the player from the TeamAPI.
+     *
      * @param teamPlayer
      */
     public void onPlayerLeave(TeamPlayer teamPlayer) {
